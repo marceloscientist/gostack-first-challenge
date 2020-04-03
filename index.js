@@ -8,6 +8,7 @@ const projects = [
     title: 'New project', 
     tasks: []
   }
+
 ]
 server.post('/projects', (req,res,next)=>{
   const project = req.body
