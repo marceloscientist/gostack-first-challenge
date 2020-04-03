@@ -1,0 +1,17 @@
+{
+  "name": "gostack-first-challenge",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/marceloscientist/gostack-first-challenge.git",
+  "author": "Marcelo <marcelo.scientist@hotmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
