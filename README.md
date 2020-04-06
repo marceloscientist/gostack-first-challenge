@@ -9,21 +9,20 @@ Create an application to store projects and their tasks from scratch
 using Express.
 
 Routes
-POST | projects: 
-The route must receive id and title within the body and register a new project 
-within an array in the following format: 
-{ 
-  id: "1", 
-  title: 'New project', 
-  tasks: []
-}; 
-Make sure to send both the project ID and the title in string format with 
-double quotes.
+DONE :: 
+    POST | projects: 
+    The route must receive id and title within the body and register a new project 
+    within an array in the following format: 
+    { 
+      id: "1", 
+      title: 'New project', 
+      tasks: []
+    }; 
+    Make sure to send both the project ID and the title in string format with 
+    double quotes.
 
-
-
-GET | projects: 
-Route that lists all projects and their tasks;
+    GET | projects: 
+    Route that lists all projects and their tasks;
 
 PUT | projects/:id: 
 The route must change only the title of the project with the id present in the 
