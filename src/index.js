@@ -22,9 +22,9 @@ const projects = [
 ]
 
 server.post('/projects', (req,res,next)=>{
-  const project = req.body
-  projects.push({project})
-  return res.json({project})
+  const {id, title, tasks} = req.body
+  projects.push({id, title, tasks})
+  return res.json(projects)
 }) 
 
 
