@@ -1,47 +1,61 @@
 const express = require('express');
-
+const { uuid } = require('uuidv4')
 const server = express()
 server.use(express.json())
 
+const projects = [ ]
 
-const projects = [
-  { "id": "1", "title": "New project 1", "tasks": ["coding", "debbuging"] }, 
-  { "id": "2", "title": "New project 2", "tasks": ["coding", "debbuging"] }, 
-]
+projectsIndex = (ps, id)=>ps.findIndex(p => p.id===id)
 
-server.post('/projects', (req,res,next)=>{
-  const {id, title, tasks} = req.body
-  projects.push({id, title, tasks})
-  return res.json(projects)
-}) 
-
-server.post('/projects/:id/tasks', (req,res,next)=>{
-  const { id } = req.params
-  const { title } = req.body
-  projects.map(p => p.id===id? p.tasks.push(title):p)
-  return res.json(projects)
-}) 
 
 server.get('/projects', (req,res,next)=>{
   return res.json(projects)
 }) 
 
+server.post('/projects', (req,res,next)=>{
+  const {title, tasks} = req.body
+  const project = { id: uuid(), title, tasks}
+  projects.push(project)
+  return res.json(project)
+}) 
+
+server.post('/projects/:id/tasks', (req,res,next)=>{
+  const { id } = req.params
+  const { title } = req.body
+
+  pi = projectsIndex(projects, id)
+  if(pi < 0) { return res.status(400).json({error:"There's no project with this id"}) }
+
+  projects[pi].tasks.push(title)
+  return res.json(projects)
+}) 
+
 server.get('/projects/:id', (req,res,next)=>{
   const { id } = req.params
-  return res.json(projects[id - 1])
+
+  pi = projectsIndex(projects, id)
+  if(pi < 0) { return res.status(400).json({error:"There's no project with this id"}) }
+  return res.json(projects[pi])
 }) 
 
 server.put('/projects/:id', (req,res,next)=>{
   const { id } = req.params
-  const { title } = req.body
-  projects.map(p => p.id===id? p.title=title:p)
-  return res.json(projects[id - 1])
+  const { title, tasks } = req.body
+
+  pi = projectsIndex(projects, id)
+  if(pi < 0) { return res.status(400).json({error:"There's no project with this id"}) }
+  const project = { id, title, tasks }
+  projects[pi] = project
+  return res.json(projects[pi])
 })
 
 server.delete('/projects/:id', (req,res,next)=>{
   const { id } = req.params
-  projects.splice(id-1, 1)
-    return res.json(projects[id - 1])
+
+  pi = projectsIndex(projects, id)
+  if(pi < 0) { return res.status(400).json({error:"There's no project with this id"}) }
+  projects.splice(pi, 1)
+  return res.json(projects[pi])
 })
 
 server.listen(3333)
