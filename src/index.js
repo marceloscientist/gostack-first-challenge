@@ -1,9 +1,31 @@
 const express = require('express');
-const { uuid } = require('uuidv4')
+const cors = require('cors')
+const { uuid, isUuid } = require('uuidv4')
+
 const server = express()
+server.use(cors())
 server.use(express.json())
 
 const projects = [ ]
+counter = 0
+
+function logRequests(req, res, next) {
+  const { method, url } = req
+  counter++
+  const logLabel = `[${method.toUpperCase()} ${url}] - That is your #${counter}`
+  console.log(logLabel)
+  return next()
+}
+function validateProjectId(res, req, next) {
+  const {id} = req.params
+  if(!isUuid(id)) {
+    return res.status(400).json({error: 'Invalid Project Id'})
+  }
+  return next()
+}
+
+server.use(logRequests)
+server.use('/projects/:id',logRequests)
 
 projectsIndex = (ps, id)=>ps.findIndex(p => p.id===id)
 
@@ -55,7 +77,7 @@ server.delete('/projects/:id', (req,res,next)=>{
   pi = projectsIndex(projects, id)
   if(pi < 0) { return res.status(400).json({error:"There's no project with this id"}) }
   projects.splice(pi, 1)
-  return res.json(projects[pi])
+  return res.status(204).send()
 })
 
 server.listen(3333)
